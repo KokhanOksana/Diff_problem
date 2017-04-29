@@ -8,37 +8,55 @@ using System.Threading.Tasks;
 
 namespace Koshi_giu.Tasks
 {
-    using Function = Func<double, double [ ], double>;
+    using Function = Func<decimal, decimal [ ], decimal>;
     class Boundary
     {
-        public Function  Right_func { get; set; }
-        public Func<double[], double> [ ] Boundary_funcs { get; set; }
-        public Value[] Values { get; set; }
+        public Boundary_equal  Equal { get; set; }
+        public Edge Edge_conditions { get; set; }
 
-        Func<double, double>  Solution { get; set; }
-        public Step_Solver solver;
+        public Func<decimal, decimal>  Solution { get; set; }
+        //public Step_Solver solver;
 
-        public Boundary( Function right_func,
-                        Func<double [ ], double> [ ] boundary_funcs,
-                        Func<double, double> solution,
-                        Value[] values, 
+        public Boundary(Boundary_equal equal,
+                        Edge edge, 
+                        Func<decimal, decimal> solution,
                         Step_Solver solver)
         {
-            this.Right_func = right_func;
-            Boundary_funcs = boundary_funcs;
+            this.Equal = equal;
+            this.Edge_conditions = edge; 
             this.Solution = solution;
-            this.Values = values;
-            this.solver = solver;
+            //this.solver = solver;
         }
 
-        public double [ ] Solve( double x , double So, Function[] funcs_diffs, Cauchy_Solver cauchy_solver )
-        {
-            return solver.Solve( this, x, So, funcs_diffs, cauchy_solver );
-        }
+        //public decimal [ ] Solve( decimal x , decimal So, Function[] funcs_diffs, Cauchy_Solver cauchy_solver )
+        //{
+        //    return solver.Solve( this, x );
+        //}
 
-        public double[] Real( double x )
+        public decimal[] Real( decimal x )
         {
-            return new double [ ] { Solution( x ) };
+            return new decimal [ ] { Solution( x ) };
         }
+    }
+
+    public class Edge
+    {
+        public decimal A1 { get; set; }
+        public decimal A2 { get; set; }
+        public decimal B1 { get; set; }
+        public decimal B2 { get; set; }
+        public decimal A { get; set; }
+        public decimal B { get; set; }
+
+        Func<decimal, decimal> Start_func { get; set; }
+        Func<decimal, decimal> End_func { get; set; }
+    }
+
+    public class Boundary_equal
+    {
+        public Func<decimal, decimal> Func_coef { get; set; }
+        public Func<decimal, decimal> Diff_coef { get; set; }
+        public Func<decimal, decimal> Right_func { get; set; }
+
     }
 }

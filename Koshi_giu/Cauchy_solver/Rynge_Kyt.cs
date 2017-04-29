@@ -14,23 +14,23 @@ namespace Cauchy
 {
     class Rynge_Kyt:Cauchy_Solver
     {
-        public override double [ ] Solve( Func<double, double [ ], double> [ ] right_funcs, Value[] prev_value, double x )
+        public override decimal [ ] Solve( Func<decimal, decimal [ ], decimal> [ ] right_funcs, Value[] prev_value, decimal x )
         {
             dim = prev_value[0].U.Length;
             h = x - prev_value[0].X;
 
-            double [ ] res = new double [ dim ];
-            double [ ] [ ] k = Calculate_k( right_funcs, prev_value[0], x );
+            decimal [ ] res = new decimal [ dim ];
+            decimal [ ] [ ] k = Calculate_k( right_funcs, prev_value[0], x );
             for ( int p = 0; p < dim; ++p )
                 res [ p ] = prev_value[0].U [ p ] + h * ( k [ 1 ] [ p ] + 2 * k [ 2 ] [ p ] + 2 * k [ 3 ] [ p ] + k [ 4 ] [ p ] ) / 6;
             return res;
         }
 
-        private double [ ] [ ] Calculate_k ( Func<double , double [ ] , double> [ ] right_funcs ,Value prev_value, double x )
+        private decimal [ ] [ ] Calculate_k ( Func<decimal , decimal [ ] , decimal> [ ] right_funcs ,Value prev_value, decimal x )
         {
-            double [ ] [ ] k = new double [ 5 ] [ ];
+            decimal [ ] [ ] k = new decimal [ 5 ] [ ];
             for ( int i = 0; i <= 4; ++i )
-                k [ i ] = new double [ dim ];
+                k [ i ] = new decimal [ dim ];
             
             for ( int i = 0 ; i < dim ; ++i )
             {
@@ -41,9 +41,9 @@ namespace Cauchy
             return k;
         }
 
-       private double [ ] Vector_u (  double [ ] k , Value prev_value, double x )
+       private decimal [ ] Vector_u (  decimal [ ] k , Value prev_value, decimal x )
         {
-            double [ ] u_vector = new double [ dim];
+            decimal [ ] u_vector = new decimal [ dim];
             for ( int t = 0 ; t < dim ; ++t )
                 u_vector [ t ] = prev_value.U [ t ] + k[ t ] * h / 2;
             return u_vector;

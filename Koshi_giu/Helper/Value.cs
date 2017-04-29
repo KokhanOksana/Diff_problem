@@ -8,10 +8,10 @@ namespace Koshi_giu.Helper
 {
     public class Value
     {
-        public double X { get; set; }
-        public double [ ] U { get; set; }
+        public decimal X { get; set; }
+        public decimal [ ] U { get; set; }
 
-        public Value( double x, double [ ] u )
+        public Value( decimal x, decimal [ ] u )
         {
             X = x;
             U = u;

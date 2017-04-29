@@ -10,10 +10,10 @@ namespace Cauchy.Helper
     abstract class Step_solver
     {
         public Cauchy Task { get; set; }
-        public double H { get; set; }
+        public decimal H { get; set; }
 
         public event Func<Value, bool> Value_changed;
-        public event Func<double, bool> Step_changed;
+        public event Func<decimal, bool> Step_changed;
 
         public Step_solver( Cauchy task)
         {
@@ -23,14 +23,14 @@ namespace Cauchy.Helper
 
         public abstract void Disconect( Func<Value, bool> value_observers );
 
-        public double [ ] Solve( double x, int point_count )
+        public decimal [ ] Solve( decimal x, int point_count )
         {
             int dim = Task.Start_value[0].U.Length;
-            double [ ] result = new double [ dim ];
+            decimal [ ] result = new decimal [ dim ];
             H = ( x - Task.Start_value.Last().X ) / point_count;
             Task.Start_value.Last().U.CopyTo( result, 0 );
 
-            double x_current = Task.Start_value.Last().X;
+            decimal x_current = Task.Start_value.Last().X;
             Value [ ] current_value = new Value [ Task.Start_value.Length ];
             Task.Start_value.CopyTo( current_value, 0 );
             do                         
@@ -56,7 +56,7 @@ namespace Cauchy.Helper
     class Regular_step:Step_solver
     {
         public Regular_step(Cauchy task,
-            Func<Value, bool>[] value_observers = null, Func<Double, bool> step_observer = null ) 
+            Func<Value, bool>[] value_observers = null, Func<decimal, bool> step_observer = null ) 
                 : base(task )
         {
             foreach(var observer in value_observers)
@@ -84,7 +84,7 @@ namespace Cauchy.Helper
     class Divided_step:Step_solver
     {
         public Divided_step( Cauchy task,
-           Func<Value, bool> [ ] value_observers, Func<Double, bool> step_observer )
+           Func<Value, bool> [ ] value_observers, Func<decimal, bool> step_observer )
                 : base( task )
         {
             foreach ( var observer in value_observers )
@@ -101,11 +101,11 @@ namespace Cauchy.Helper
 
         protected override bool Change_step( Value [ ] current_value )
         {
-            double eps = 0.0001;
-            double [ ] next_value_h = Task.Solve( current_value, current_value.Last().X + H );
+            decimal eps = 0.0001M;
+            decimal [ ] next_value_h = Task.Solve( current_value, current_value.Last().X + H );
             next_value_h = Task.Solve( new Value [ ] { new Value( current_value.Last().X + H, next_value_h ) }, current_value.Last().X + 2 * H );
 
-            double [ ] next_value_2h = Task.Solve( current_value, current_value.Last().X + 2 * H );
+            decimal [ ] next_value_2h = Task.Solve( current_value, current_value.Last().X + 2 * H );
 
             if ( Vector_operation.Distant( next_value_h, next_value_2h ) < eps )
             {
@@ -129,7 +129,7 @@ namespace Cauchy.Helper
 
         public event Func<Value, bool> Value_changed;
 
-        public Lateness_Solver( Cauchy task, Func<Value, bool> [ ] value_observers , Func<Double, bool> step_observer )
+        public Lateness_Solver( Cauchy task, Func<Value, bool> [ ] value_observers , Func<decimal, bool> step_observer )
                 : base( task )
         {
             foreach ( var observer in value_observers )
@@ -142,7 +142,7 @@ namespace Cauchy.Helper
             throw new NotImplementedException();
         }
 
-        public new  double [ ] Solve( double x, int point_count )
+        public new  decimal [ ] Solve( decimal x, int point_count )
         {
 
             int dim = Task.Start_value [ 0 ].U.Length;
@@ -151,18 +151,18 @@ namespace Cauchy.Helper
             Value [ ] current_value = new Value [ Task.Start_value.Length ];
             Task.Start_value.CopyTo( current_value, 0 );
 
-            double [ ] [ ] U_previous = new double [ point_count ] [ ];
+            decimal [ ] [ ] U_previous = new decimal [ point_count ] [ ];
             for ( int i = 0; i < point_count; ++i )
             {
-                U_previous [ i ] = new double [ dim ];
+                U_previous [ i ] = new decimal [ dim ];
                 for ( int j = 0; j < dim; ++j )
                     U_previous [ i ] [ j ] = Task.Lateness_start_func [ j ]( - Task.Lateness[j] + i*H);
             }
             do
             {
-                double [ ] [ ] U_current = new double [ point_count ] [ ];
+                decimal [ ] [ ] U_current = new decimal [ point_count ] [ ];
                 for ( int i = 0; i < point_count; ++i )
-                    U_current [ i ] = new double [ dim ];
+                    U_current [ i ] = new decimal [ dim ];
 
                 for (int i = 0;i< point_count;++i )
                 {

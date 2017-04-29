@@ -16,14 +16,14 @@ namespace Koshi_giu
     using Cauchy;
     using Cauchy.Helper;
     using System.Windows.Forms.DataVisualization.Charting;
-    using Function = Func<double, double [ ], double>;
+    using Function = Func<decimal, decimal [ ], decimal>;
     
     public partial class KMDS : Form
     {
         DataTable data;
         Cauchy task;
         Lateness_Solver solver;
-        double [ ] max_err;
+        decimal [ ] max_err;
 
         public KMDS()
         {
@@ -34,42 +34,42 @@ namespace Koshi_giu
             Function [ ] right_func = new Function [ equal_count ]
                 { ( xx, uu ) => 0};
             Value [ ] start_values = new Value [ 1 ]
-                { new Value( 0, new double [ equal_count ]
+                { new Value( 0, new decimal [ equal_count ]
                     { 1 } )
                 };
-            Func<double, double [ ]> [ ] solution = new Func<double, double [ ]> [ 4 ]
-                { x => new double[] { 1 - x},
-                  x => new double[] { (x * x)/2 - 2*x + 1.5},
-                  x => new double[] { -0.1666667*x*x*x + 1.5*x*x - 4*x +2.83333},
-                  x => new double[] { 0.0416662*x*x*x*x - 0.666667*x*x*x + 3.75*x*x - 8.5*x + 6.20731}};
+            Func<decimal, decimal [ ]> [ ] solution = new Func<decimal, decimal [ ]> [ 4 ]
+                { x => new decimal[] { 1 - x},
+                  x => new decimal[] { (x * x)/2 - 2*x + 1.5M},
+                  x => new decimal[] { -0.1666667M*x*x*x + 1.5M*x*x - 4*x +2.83333M},
+                  x => new decimal[] { 0.0416662M*x*x*x*x - 0.666667M*x*x*x + 3.75M*x*x - 8.5M*x + 6.20731M}};
 
-            double [ ] lateness = new double [ equal_count ] { 1 };
-            double [ ] lateness_val = new double [ equal_count ] { 1 };
-            Func<double, double> [ ] lateness_func = new Func<double, double> [ equal_count ]
+            decimal [ ] lateness = new decimal [ equal_count ] { 1 };
+            decimal [ ] lateness_val = new decimal [ equal_count ] { 1 };
+            Func<decimal, decimal> [ ] lateness_func = new Func<decimal, decimal> [ equal_count ]
                 {(x) => -x};
-            Func<double, double> [ ] lateness_start_func = new Func<double, double> [ equal_count ]
+            Func<decimal, decimal> [ ] lateness_start_func = new Func<decimal, decimal> [ equal_count ]
                 {(x) => 1};
 
-            max_err = new double [ equal_count ];
+            max_err = new decimal [ equal_count ];
 
             //Function [ ] right_func = new Function [ equal_count ]
             //     { ( x, u ) => u[0],
             //       ( x, u ) => u[0] + u[1]};
             //Value [ ] start_values = new Value [ 1 ]
-            //    { new Value( 0, new double [ equal_count ]
+            //    { new Value( 0, new decimal [ equal_count ]
             //        { 1, 1 } )
             //    };
-            //Func<double, double [ ]> [ ] solution = new Func<double, double [ ]> [ equal_count ]
-            //    { x => new double[] { 2 * Math.Exp(x) - 1,
+            //Func<decimal, decimal [ ]> [ ] solution = new Func<decimal, decimal [ ]> [ equal_count ]
+            //    { x => new decimal[] { 2 * Math.Exp(x) - 1,
             //                        ( 2 * x + x * Math.Exp(-x) + 1) * Math.Exp(x) },
-            //      x => new double[] {2 * Math.Exp(x-1) * x - 4 * Math.Exp(x-1) + 2 * Math.Exp(x) + 1,
+            //      x => new decimal[] {2 * Math.Exp(x-1) * x - 4 * Math.Exp(x-1) + 2 * Math.Exp(x) + 1,
             //                         Math.Exp(x-1) * ( 2*x*x - 5*x +6 ) + Math.Exp(x)*( 2*x + 1 ) - x - 1} };
-            //double [ ] lateness = new double [ equal_count ] { 1, 1 };
-            //double [ ] lateness_val = new double [ equal_count ] { 1, 1 };
-            //Func<double, double> [ ] lateness_func = new Func<double, double> [ equal_count ]
+            //decimal [ ] lateness = new decimal [ equal_count ] { 1, 1 };
+            //decimal [ ] lateness_val = new decimal [ equal_count ] { 1, 1 };
+            //Func<decimal, decimal> [ ] lateness_func = new Func<decimal, decimal> [ equal_count ]
             //    {x => x,
             //     x => x};
-            //Func<double, double> [ ] lateness_start_func = new Func<double, double> [ equal_count ]
+            //Func<decimal, decimal> [ ] lateness_start_func = new Func<decimal, decimal> [ equal_count ]
             //    { x => 1,
             //      x => 1 - x};
 
@@ -109,7 +109,7 @@ namespace Koshi_giu
                 max_err [ i ] = 0;
             }
 
-            double x = double.Parse( x_tb.Text );
+            decimal x = decimal.Parse( x_tb.Text );
 
 
             solver.Solve( x, 20 );
@@ -129,7 +129,7 @@ namespace Koshi_giu
         {
             string [ ] row = new string [ 3*task.Right_funcs.Length + 1 ];
             row [ 0 ] = sv.X.ToString();
-            double [ ] real = task.Real_Solution( sv.X );
+            decimal [ ] real = task.Real_Solution( sv.X );
             for ( int i = 1, j = 1; i <= task.Right_funcs.Length; ++i, ++j )
             {
                 row [ j ]  =    sv.U [ i - 1 ].ToString();
@@ -146,7 +146,7 @@ namespace Koshi_giu
 
         public bool Plot_point(Value point)
         {
-            double [ ] real = task.Real_Solution( point.X );
+            decimal [ ] real = task.Real_Solution( point.X );
 
             for ( int i = 0; i < task.Right_funcs.Length; ++i )
             {
