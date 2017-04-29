@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Cauchy.Cauchy">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAQAAAAAAAAAQAAAIAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tasks\Cauchy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Helper.Divided_step">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <InheritanceLine Type="Cauchy.Helper.Step_solver" FixedFromPoint="true">
+      <Path>
+        <Point X="2.25" Y="0.95" />
+        <Point X="2" Y="0.95" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAA=</HashCode>
+      <FileName>Helper\Step.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Helper.Step_solver">
+    <Position X="2.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAIAAAAAAAAMkAAAEAAIAA=</HashCode>
+      <FileName>Helper\Step.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Helper.Regular_step">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <InheritanceLine Type="Cauchy.Helper.Step_solver" FixedFromPoint="true">
+      <Path>
+        <Point X="2.25" Y="0.95" />
+        <Point X="2.127" Y="0.95" />
+        <Point X="2.127" Y="3.535" />
+        <Point X="2" Y="3.535" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAA=</HashCode>
+      <FileName>Helper\Step.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Eiler_Cauchy">
+    <Position X="9.25" Y="1" Width="1.5" />
+    <InheritanceLine Type="Cauchy.Cauchy_Solver" FixedFromPoint="true">
+      <Path>
+        <Point X="7.25" Y="0.625" />
+        <Point X="10" Y="0.625" />
+        <Point X="10" Y="1" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAACAAAAAAAAAIAAA=</HashCode>
+      <FileName>Cauchy_solver\Eiler_Cauchy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Adams_Bashford">
+    <Position X="11" Y="1" Width="1.5" />
+    <InheritanceLine Type="Cauchy.Cauchy_Solver" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.25" Y="0.625" />
+        <Point X="11.625" Y="0.625" />
+        <Point X="11.625" Y="1" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cauchy_solver\Adams_Bashford.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Rynge_Kyt">
+    <Position X="7.5" Y="1" Width="1.5" />
+    <InheritanceLine Type="Cauchy.Cauchy_Solver" FixedFromPoint="true">
+      <Path>
+        <Point X="7.25" Y="0.625" />
+        <Point X="8.25" Y="0.625" />
+        <Point X="8.25" Y="1" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Cauchy_solver\Rynge_Kyt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Koshi_giu.Tasks.Boundary">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAACAAACAIAAAACAAAAAAgCAAAAAA=</HashCode>
+      <FileName>Tasks\Boundary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cauchy.Cauchy_Solver">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAIAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Tasks\Cauchy_Solver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Koshi_giu.Boundary_solver.Choot">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAACBAAAAAAAAAAAAIAAAAAACwAAgAEACAAAA=</HashCode>
+      <FileName>Boundary_solver\Choot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
