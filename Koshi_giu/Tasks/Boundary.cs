@@ -41,15 +41,18 @@ namespace Koshi_giu.Tasks
 
     public class Edge
     {
-        public decimal A1 { get; set; }
-        public decimal A2 { get; set; }
-        public decimal B1 { get; set; }
-        public decimal B2 { get; set; }
-        public decimal A { get; set; }
-        public decimal B { get; set; }
+        public decimal Coef_start_fun { get; set; }
+        public decimal Coef_end_fun { get; set; }
+        public decimal Coef_start_diff { get; set; }
+        public decimal Coef_end_diff { get; set; }
+        public decimal Start { get; set; }
+        public decimal End { get; set; }
 
-        Func<decimal, decimal> Start_func { get; set; }
-        Func<decimal, decimal> End_func { get; set; }
+        public decimal Val_start { get; set; }
+        public decimal Val_end { get; set; }
+
+        public Func<decimal, decimal> Start_func { get; set; }
+        public Func<decimal, decimal> End_func { get; set; }
     }
 
     public class Boundary_equal

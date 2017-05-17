@@ -20,11 +20,11 @@ namespace Cauchy
         public decimal[] Lateness{ get; set; }
         public decimal [ ] Lateness_val { get; set; }
         public Func<decimal, decimal> [ ] Lateness_start_func { get; set;}
-        Func<decimal, decimal> [ ] Lateness_func { get; set; }
+        Func<decimal[], decimal> [ ] Lateness_func { get; set; }
 
 
         public Cauchy( Functions [ ] right_funcs, Func<decimal, decimal[]> [ ] solution, Value [ ] start_value, Cauchy_Solver solver,
-                        decimal [ ] lateness = null, decimal [ ] lateness_val = null, Func<decimal, decimal> [ ] lateness_func = null, Func<decimal, decimal>[] lateness_start_func = null )
+                        decimal [ ] lateness = null, decimal [ ] lateness_val = null, Func<decimal[], decimal> [ ] lateness_func = null, Func<decimal, decimal>[] lateness_start_func = null )
         {
             this.Start_value = start_value;
 
@@ -48,7 +48,7 @@ namespace Cauchy
             for ( int j = 0; j < Lateness.Length; ++j )
             {
                 int i = j;
-                res [ i ] = ( x, u ) => right_funcs [ i ]( x, u ) + Lateness_func [ i ]( Lateness_val [ i ] );
+                res [ i ] = ( x, u ) => right_funcs [ i ]( x, u ) + Lateness_func [ i ]( Lateness_val);
             }
             return res;
         }
