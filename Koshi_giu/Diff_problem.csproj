@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Boundary_solver\Finite_difference.cs" />
+    <Compile Include="Helper\Tridiagonal_matrix.cs" />
     <Compile Include="KMDS.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace Cauchy
 {
-    using Functions = Func<double, double [ ], double>;
+    using Functions = Func<decimal, decimal [ ], decimal>;
     class Cauchy
     {
         public Functions [ ] Right_funcs { get; set; }
         public Value[] Start_value { get; set; }
 
-        Func<double , double[]> [ ] Solution { get; set; }
+        Func<decimal , decimal[]> [ ] Solution { get; set; }
         public Cauchy_Solver solver; 
         
-        public double[] Lateness{ get; set; }
-        public double [ ] Lateness_val { get; set; }
-        public Func<double, double> [ ] Lateness_start_func { get; set;}
-        Func<double, double> [ ] Lateness_func { get; set; }
+        public decimal[] Lateness{ get; set; }
+        public decimal [ ] Lateness_val { get; set; }
+        public Func<decimal, decimal> [ ] Lateness_start_func { get; set;}
+        Func<decimal[], decimal> [ ] Lateness_func { get; set; }
 
 
-        public Cauchy( Functions [ ] right_funcs, Func<double, double[]> [ ] solution, Value [ ] start_value, Cauchy_Solver solver,
-                        double [ ] lateness = null, double [ ] lateness_val = null, Func<double, double> [ ] lateness_func = null, Func<double, double>[] lateness_start_func = null )
+        public Cauchy( Functions [ ] right_funcs, Func<decimal, decimal[]> [ ] solution, Value [ ] start_value, Cauchy_Solver solver,
+                        decimal [ ] lateness = null, decimal [ ] lateness_val = null, Func<decimal[], decimal> [ ] lateness_func = null, Func<decimal, decimal>[] lateness_start_func = null )
         {
             this.Start_value = start_value;
 
@@ -48,20 +48,19 @@ namespace Cauchy
             for ( int j = 0; j < Lateness.Length; ++j )
             {
                 int i = j;
-                res [ i ] = ( x, u ) => right_funcs [ i ]( x, u ) + Lateness_func [ i ]( Lateness_val [ i ] );
+                res [ i ] = ( x, u ) => right_funcs [ i ]( x, u ) + Lateness_func [ i ]( Lateness_val);
             }
             return res;
         }
 
-        public double [ ] Solve( Value[] prev_value, double x)
+        public decimal [ ] Solve( Value[] prev_value, decimal x)
         {
             return solver.Solve( Right_funcs, prev_value, x );
         }
 
-        public double[] Real_Solution(double x)
+        public decimal[] Real_Solution(decimal x)
         {
-            double ff = Math.Truncate( (x-0.005) / Lateness [ 0 ] );
-            int interval = Convert.ToInt32( Math.Truncate( ( x - 0.005 ) / Lateness[0]));
+            int interval = Convert.ToInt32( Math.Truncate( ( x - 0.005M ) / Lateness[0]));
             return Solution [ interval ]( x );
         }
     }

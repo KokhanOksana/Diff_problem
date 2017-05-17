@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Koshi_giu.Tasks
 {
     using Cauchy;
-    using Function = Func<double, double [ ], double>;
+    using Function = Func<decimal, decimal [ ], decimal>;
     abstract class Step_Solver
     {
         public event Func<Value, bool> Iteration_changed;
@@ -23,6 +23,6 @@ namespace Koshi_giu.Tasks
            Iteration_value_observer = iteration_value_observer;
         }
 
-        public abstract double [ ] Solve( Boundary task, double x, double So, Function [ ] funcs_diff, Cauchy_Solver cauchy_solver);
+        public abstract decimal [ ] Solve( Boundary task, decimal x, decimal So = 0, Function [ ] funcs_diff = null, Cauchy_Solver cauchy_solver = null);
     }
 }

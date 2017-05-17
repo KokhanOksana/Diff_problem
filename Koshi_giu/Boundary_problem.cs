@@ -14,13 +14,13 @@ using System.Windows.Forms;
 namespace Koshi_giu
 {
     using Cauchy;
+    using System.Linq.Expressions;
     using System.Windows.Forms.DataVisualization.Charting;
-    using Function = Func<double, double [ ], double>;
+    using Function = Func<decimal, decimal [ ], decimal>;
 
     public partial class Boundary_problem : Form
     {
-        DataTable iter_data;
-        DataTable res_data;
+        DataTable data;
         int iterations;
         Boundary task;
 
@@ -28,125 +28,153 @@ namespace Koshi_giu
         {
             InitializeComponent();
 
-            iter_data = new DataTable();
-            iter_data.Columns.Add( new DataColumn( "S", typeof( string ) ) );
-            iter_data.Columns.Add( new DataColumn( "V", typeof( string ) ) );
-            iteration_data.DataSource = iter_data;
+            data = new DataTable();
+            data.Columns.Add( new DataColumn( "Xi", typeof( string ) ) );
+            data.Columns.Add( new DataColumn( "Yi", typeof( string ) ) );
+            data.Columns.Add( new DataColumn( "Yi_real", typeof( string ) ) );
+            data.Columns.Add( new DataColumn( "error", typeof( string ) ) );
+            result_data.DataSource = data;
 
-            res_data = new DataTable();
-            res_data.Columns.Add( new DataColumn( "X", typeof( string ) ) );
-            res_data.Columns.Add( new DataColumn( "V", typeof( string ) ) );
-            result_data.DataSource = res_data;
+            //Boundary_equal bound_equal = new Boundary_equal()
+            //{
+            //    Right_func = x => 2 / ( x * x * x ) - 2,
+            //    Diff_coef = x => 0,
+            //    Func_coef = x => -2 * x
+            //};
+            //Edge edge = new Edge()
+            //{
+            //    Start = 1,
+            //    End = 2,
+            //    Coef_start_fun = 1,
+            //    Coef_start_diff = 0,
+            //    Coef_end_fun = 1,
+            //    Coef_end_diff = 0,
+            //    Val_start = 1,
+            //    Val_end = 0.5M,
+            //    Start_func = x => 1,
+            //    End_func = x => 0.5M
+            //};
+            //Func<decimal, decimal> solution = new Func<decimal, decimal>( x => 1 / x );
+
+            Boundary_equal bound_equal = new Boundary_equal()
+            {
+                Right_func = x => ( decimal ) Math.Exp( ( double ) x ) * ( x * x + x + 2 ),
+                Diff_coef = x => x,
+                Func_coef = x => -1
+            };
+            Edge edge = new Edge()
+            {
+                Start = 0,
+                End = 1,
+                Coef_start_fun = 0,
+                Coef_start_diff = 1,
+                Coef_end_fun = 1,
+                Coef_end_diff = 0,
+                Val_start = 1,
+                Val_end = ( decimal ) Math.E,
+                Start_func = x => 1,
+                End_func = x => ( decimal ) Math.E
+            };
+            Func<decimal, decimal> solution = new Func<decimal, decimal>( x => x * ( decimal ) Math.Exp( ( double ) x ) );
+
+
+            //Boundary_equal bound_equal = new Boundary_equal()
+            //{
+            //    Right_func = x => -6 * x * x + 5 * x + 6,
+            //    Diff_coef = x => 2,
+            //    Func_coef = x => -3
+            //};
+            //Edge edge = new Edge()
+            //{
+            //    Start = 0,
+            //    End = 1,
+            //    Coef_start_fun = 1,
+            //    Coef_start_diff = 1,
+            //    Coef_end_fun = 0,
+            //    Coef_end_diff = 1,
+            //    Val_start = 1,
+            //    Val_end = 5,
+            //    Start_func = x => 1,
+            //    End_func = x => 5
+            //};
+            //Func<decimal, decimal> solution = new Func<decimal, decimal>( x => 2 * x * x + x );
+
+            //Boundary_equal bound_equal = new Boundary_equal()
+            //{
+            //    Right_func = x => -2 * ( decimal ) Math.Exp( ( double ) x ),
+            //    Diff_coef = x => -1,
+            //    Func_coef = x => -2
+            //};
+            //Edge edge = new Edge()
+            //{
+            //    Start = 0,
+            //    End = 1,
+            //    Coef_start_fun = 0,
+            //    Coef_start_diff = 1,
+            //    Coef_end_fun = 2,
+            //    Coef_end_diff = -1,
+            //    Val_start = 3,
+            //    Val_end = ( decimal ) Math.E,
+            //    Start_func = x => 3,
+            //    End_func = x => ( decimal ) Math.E
+            //};
+            //Func<decimal, decimal> solution = new Func<decimal, decimal>( x => ( decimal ) Math.Exp( ( double ) x ) + ( decimal ) Math.Exp( 2 * ( double ) x ) );
+
+            task = new Boundary( bound_equal, edge, solution, null );
+            
         }
 
         private void button_Click( object sender, EventArgs e )
         {
-            iterations = -1;
             if ( chart.Series.Count != 0 )
                 chart.Series.Clear();
-            
-            double a = Double.Parse(a_tb .Text );
-            double b = double.Parse(b_tb .Text );
+            chart.Series.Add( "Y" );
+            chart.Series [ "Y" ].ChartType = SeriesChartType.Line;
+            chart.Series [ "Y" ].BorderWidth = 1;
+            chart.Series.Add( "Y_real" );
+            chart.Series [ "Y_real" ].ChartType = SeriesChartType.Line;
+            chart.Series [ "Y_real" ].BorderWidth = 1;
 
-            double a0 = Double.Parse(a0_tb .Text );
-            double b0 = double.Parse(b0_tb .Text );
+            decimal eps = decimal.Parse( eps_tb.Text );
 
-            double a1 = Double.Parse(a1_tb .Text );
-            double b1 = double.Parse(b1_tb .Text );
+            decimal[] result =  Finite_difference.Solve( task, task.Edge_conditions.End, eps );
 
-            double alp = Double.Parse(alpha_tb .Text );
-            double bet = double.Parse(betha_tb .Text );
-
-            double eps = Double.Parse( eps_tb.Text );
-            double So = double.Parse(So_tb.Text );
-
-            double x = double.Parse( x_tb.Text );
-
-            // a = 1 // b = 2 // alp = 1  // bet = 0,5
-            Function right_func = ( xx, uu ) => 2 * xx * uu [ 0 ] + 2 / xx * xx * xx - 2;
-            Func<double, double> solution = xx => 1 / xx;
-            Function [ ] func_diffs = new Function [ 2 ]
-                                    {(xx,uu) => 2 * xx,
-                                    (xx,uu) => 0 };
-
-
-            // a = 0 // b = 1 // alp = 1  // bet = 2.71828182846
-            //Function right_func = ( xx, uu ) => uu [ 0 ] - xx * uu [ 1 ] + Math.Exp( xx ) * ( xx * xx + xx + 2 );
-            //Func<double, double> solution = xx => xx * Math.Exp( xx );
-            //Function [ ] func_diffs = new Function [ 2 ]
-            //                        {(xx,uu) => 1,
-            //                        (xx,uu) =>  -xx };
-
-            // a = 1 // b = 0 // alp = 1 // bet = 5
-            //Function right_func = ( xx, uu ) => 3 * uu [ 0 ] - 2 * uu [ 1 ] - 6 * xx * xx + 5 * xx + 6;
-            //Func<double, double> solution = xx => 2 * xx + xx;
-            //Function [ ] func_diffs = new Function [ 2 ]
-            //                        {(xx,uu) => 3,
-            //                        (xx,uu) => -2 };
-
-            Func<double [ ], double> [ ] boundary_funcs = new Func<double [ ], double> [ 2 ]
-                                    { u => a0 * u [ 0 ] + b0 * u [ 1 ],
-                                      u => a1 * u [ 0 ] + b1 * u [ 1 ] };
-
-            
-            Value [ ] values = new Value [ 2 ] 
-                                { new Value( a, new double [ ] { alp } ),
-                                  new Value( b, new double [ ] { bet } ) };
-
-            Step_Solver solver = new Choot(Display_iter,Display_res, Plot_point);
-            task = new Boundary( right_func,boundary_funcs, solution, values, solver );
-            task.Solve( x, So ,func_diffs,new Rynge_Kyt());
-            Plot_solution();
-
-        }
-
-        public bool Display_iter(Value sv)
-        {
-            string [ ] row = new string [ 2 ];
-            row [ 0 ] = sv.X.ToString();
-            row [ 1 ] = sv.U[0].ToString();
-            iter_data.Rows.Add( row );
-
-            New_iteration();
-            return true;
+            decimal h = ( task.Edge_conditions.End - task.Edge_conditions.Start ) / ( result.Length - 1 );
+            n_txt.Text = "n = " + result.Length.ToString();
+            for ( int i = 0; i< result.Length; ++i )
+            {
+                chart.Series [ "Y" ].Points.AddXY( task.Edge_conditions.Start + i * h, result[i] );
+                chart.Series [ "Y_real" ].Points.AddXY( task.Edge_conditions.Start + i * h, task.Solution( task.Edge_conditions.Start + i * h) );
+                string [ ] row = new string [ 4 ];
+                row [ 0 ] = (task.Edge_conditions.Start + i*h).ToString();
+                row [ 1 ] = result [ i ].ToString();
+                row [ 2 ] = task.Solution( task.Edge_conditions.Start + i * h ).ToString();
+                row [ 3 ] = Math.Abs( result [ i ] - task.Solution( task.Edge_conditions.Start + i * h ) ).ToString();
+                data.Rows.Add( row );
+            }
         }
 
         public bool Display_res( Value new_val )
         {
-            string [ ] row = new string [ 2 ];
+            string [ ] row = new string [ 4 ];
             row [ 0 ] = new_val.X.ToString();
             row [ 1 ] = new_val.U [ 0 ].ToString();
-            res_data.Rows.Add( row );
-            
+           // row [ 2 ] = task.Solution( new_val.X).ToString();
+           // row [ 3 ] = Math.Abs( new_val.U [ 0 ] - task.Solution( new_val.X ) ).ToString();
+            data.Rows.Add( row );
             return true;
-        }
-
-        private void New_iteration()
-        {
-            iterations++;
-            string [ ] row = new string [ 2 ];
-            row [ 0 ] = "||||||||||||||| S" + iterations.ToString() + " |||||||||||||||||";
-            res_data.Rows.Add( row );
-
-            string new_chart_name = iterations.ToString();
-            chart.Series.Add( new_chart_name );
-            chart.Series [ new_chart_name ].ChartType = SeriesChartType.Line;
-            chart.Series [ new_chart_name ].BorderWidth = 1;
         }
 
         public bool Plot_point(Value point)
         {
-            chart.Series [ iterations.ToString() ].Points.AddXY( point.X, point.U [ 0 ] );
+            chart.Series [ "Y" ].Points.AddXY( point.X, point.U [ 0 ] );
+            //chart.Series [ "Y_real" ].Points.AddXY( point.X, task.Solution(point.X));
             return true;
         }
 
-        private void Plot_solution()
+        private void Boundary_problem_Load( object sender, EventArgs e )
         {
-            New_iteration();
-            for(double x = task.Values[0].X; x<=task.Values[1].X;x+=0.01 )
-            {
-                Plot_point( new Value( x, task.Real( x ) ));
-            }
+          
         }
     }
 }

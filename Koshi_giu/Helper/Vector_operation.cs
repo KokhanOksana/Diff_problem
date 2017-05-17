@@ -8,29 +8,29 @@ namespace Cauchy.Helper
 {
     static class Vector_operation
     {
-        public static double Distant( double [ ] x, double [ ] y )
+        public static decimal Distant( decimal [ ] x, decimal [ ] y )
         {
             int dimension = x.Length;
-            double res = 0;
+            decimal res = 0;
             for ( int i = 0; i < dimension; ++i )
             {
-                res += Math.Pow( x [ i ] - y [ i ], 2 );
+                res +=  (x [ i ] - y [ i ]) * ( x [ i ] - y [ i ] );
             }
-            return Math.Sqrt( res );
+            return ( decimal ) Math.Sqrt( ( Double ) res );
         }
 
-        public static double Norm( double [ ] vector )
+        public static decimal Norm( decimal [ ] vector )
         {
-            double res = 0;
-            foreach ( double x in vector )
+            decimal res = 0;
+            foreach ( decimal x in vector )
                 res += x * x;
-            return Math.Sqrt( res );
+            return (decimal) Math.Sqrt((Double) res );
         }
 
-        public static double [ ] Difference( double [ ] vector1, double [ ] vector2 )
+        public static decimal [ ] Difference( decimal [ ] vector1, decimal [ ] vector2 )
         {
             int dim = vector1.Length;
-            double [ ] res = new double [ dim ];
+            decimal [ ] res = new decimal [ dim ];
             for ( int i = 0; i < dim; ++i )
                 res [ i ] = vector1 [ i ] - vector2 [ i ];
             return res;
